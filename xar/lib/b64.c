@@ -34,68 +34,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-static unsigned char table [] = {
-'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-'s', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2',
-'3', '4', '5', '6', '7', '8', '9', '+', '/' };
-
-unsigned char* xar_to_base64(const unsigned char* input, int len)
-{
-    unsigned char b6;
-    /*UNUSED unsigned char tmp; */
-    unsigned char count = 0;
-    int i=0;
-    unsigned char* output;
-    int outsize = (((float)len)*4/3)+5;
-
-    output = malloc(outsize);
-    if( !output )
-        return NULL;
-
-    while(1) {
-        if( i >= len ) {
-            output[count++] = '\n';
-            output[count++] = '\0';
-            return output;
-        }
-        b6 = input[i];
-        b6 >>= 2;
-        output[count++] = table[b6];
-
-        b6 = input[i++];
-        b6 &= 0x03;
-        b6 <<= 4;
-        if( i >= len ) {
-            output[count++] = table[b6];
-            output[count++] = '=';
-            output[count++] = '=';
-            output[count++] = '\n';
-            output[count++] = '\0';
-            return output;
-        }
-        b6 |= input[i] >> 4;
-        output[count++] = table[b6];
-
-        b6 = input[i++] & 0x0F;
-        b6 <<= 2;
-        if( i >= len ) {
-            output[count++] = table[b6];
-            output[count++] = '=';
-            output[count++] = '\n';
-            output[count++] = '\0';
-            return output;
-        }
-        b6 |= input[i] >> 6;
-        output[count++] = table[b6];
-
-        b6 = input[i++] & 0x3F;
-        output[count++] = table[b6];
-    }
-}
-
 #ifdef _BTEST_
 int main(int argc, char* argv[]) {
     unsigned char* enc = benc(argv[1], strlen(argv[1]));
@@ -149,17 +87,17 @@ typedef enum _B64CodecErrorCodes {
 #define B64_INPUT_BLOCK_OFFSET	((inputIndex - 1 - ignorableCharacterCount) % 4)
 
 static unsigned int raw_base64_decode(
-  const unsigned char *input, unsigned char *output, int inLengthToDecode,
-  unsigned int *outputDecodedLength)
+  const unsigned char *input, unsigned char *output, size_t inLengthToDecode,
+  size_t *outputDecodedLength)
 {
     int currentBase64Value;
 	unsigned int inputIndex = 0;
-	unsigned int *decodedCharacterCount;
-	unsigned int dummyValue;
 	unsigned int ignorableCharacterCount = 0;
 	unsigned int i;
     unsigned char decodedBuffer[3];
 	unsigned char currentInputBlockPaddingCharacterCount = 0;
+	size_t *decodedCharacterCount;
+	size_t dummyValue;
 	
 	if (outputDecodedLength == NULL) {
 		// do this so that if caller passes in NULL for outputDecodedLength
@@ -246,7 +184,7 @@ static unsigned int raw_base64_decode(
     return B64_noError;
 }
 
-unsigned char* xar_from_base64(const unsigned char* input, int inputLength, unsigned int *outputLength)
+unsigned char* xar_from_base64(const unsigned char* input, size_t inputLength, size_t *outputLength)
 {
     int err;
     unsigned char *output;
