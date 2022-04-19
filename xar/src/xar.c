@@ -53,10 +53,11 @@
 #include "config.h"
 #ifndef __APPLE__
 #include "../lib/filetree.h"
+#include "../lib/util.h"
 #else
 #include "filetree.h"
-#endif // __APPLE__
 #include "util.h"
+#endif // __APPLE__
 #define SYMBOLIC 1
 #define NUMERIC  2
 static int Perms = 0;
