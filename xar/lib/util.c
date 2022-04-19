@@ -53,6 +53,10 @@
 #include "archive.h"
 #include "filetree.h"
 
+#ifndef __APPLE__
+#include <sys/statfs.h>
+#endif
+
 int xar_is_safe_filename(const char *in_filename, char** out_filename)
 {
 	int result = -1;
