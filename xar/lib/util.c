@@ -57,6 +57,10 @@
 #include <sys/statfs.h>
 #endif
 
+#ifndef MNT_LOCAL
+#define MNT_LOCAL MS_BIND
+#endif
+
 int xar_is_safe_filename(const char *in_filename, char** out_filename)
 {
 	int result = -1;
