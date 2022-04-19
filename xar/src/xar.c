@@ -51,7 +51,11 @@
 #include <time.h>
 #include "xar_internal.h"
 #include "config.h"
+#ifndef __APPLE__
+#include "../lib/filetree.h"
+#else
 #include "filetree.h"
+#endif // __APPLE__
 #include "util.h"
 #define SYMBOLIC 1
 #define NUMERIC  2
