@@ -320,6 +320,16 @@ if test "x${have_libxml2}" = "x0" ; then
 fi
 
 dnl 
+dnl Configure libcrypto (part of OpenSSL).
+dnl 
+have_libcrypto="1"
+AC_CHECK_HEADERS([openssl/evp.h], , [have_libcrypto="0"])
+AC_CHECK_LIB([crypto], [OpenSSL_add_all_ciphers], , [have_libcrypto="0"])
+if test "x${have_libcrypto}" = "x0" ; then
+  AC_MSG_ERROR([Cannot build without libcrypto (OpenSSL)])
+fi
+
+dnl 
 dnl Configure libz.
 dnl 
 have_libz="1"
@@ -343,9 +353,9 @@ dnl
 dnl Configure libpthread.
 dnl 
 have_libpthread="1"
-AC_CHECK_HEADERS([pthread.h], , [have_pthread="0"])
-AC_CHECK_LIB([pthread], [pthread_mutex_lock], , [have_pthread="0"])
-if test "x${have_pthread}" = "x1" ; then
+AC_CHECK_HEADERS([pthread.h], , [have_libpthread="0"])
+AC_CHECK_LIB([pthread], [pthread_mutex_lock], , [have_libpthread="0"])
+if test "x${have_libpthread}" = "x1" ; then
   AC_DEFINE([HAVE_PTHREAD])
 fi
 
@@ -359,3 +369,4 @@ AC_SUBST([cfgoutputs])
 AC_CONFIG_FILES([$cfgoutputs])
 
 AC_OUTPUT
+
