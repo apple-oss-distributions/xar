@@ -5136,7 +5136,7 @@ else
 fi
 
 if test "x${have_libpthread}" = "x1" ; then
-  $as_echo "#define HAVE_PTHREAD 1" >>confdefs.h
+  $as_echo "#define HAVE_LIBPTHREAD 1" >>confdefs.h
 
 fi
 
