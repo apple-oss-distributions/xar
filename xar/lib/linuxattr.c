@@ -226,7 +226,11 @@ int32_t xar_linuxattr_extract(xar_t x, xar_file_t f, const char* file, char *buf
 	if( statfs(file, &sfs) != 0 ) {
 		char *tmp, *bname;
 		tmp = strdup(file);
+		#ifndef __APPLE__
+		bname = dirname(tmp);
+		#else
 		bname = safe_dirname(tmp);
+		#endif // __APPLE__
 		statfs(bname, &sfs);
 		free(tmp);
 		free(bname);

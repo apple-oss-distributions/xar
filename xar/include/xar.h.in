@@ -52,6 +52,7 @@ extern "C" {
 #import <os/availability.h>
 #else
 #define API_DEPRECATED(...)
+#define API_AVAILABLE(...)
 #endif
 
 #pragma pack(4)

@@ -8,6 +8,10 @@
 #ifndef _XAR_INTERNAL_H_
 #define _XAR_INTERNAL_H_
 
+#ifndef __APPLE__
+#define XARSIG_BUILDING_WITH_XAR
+#endif // __APPLE__
+
 #ifdef XARSIG_BUILDING_WITH_XAR
 #include "xar.h"
 #else

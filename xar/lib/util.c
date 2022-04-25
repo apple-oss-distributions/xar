@@ -53,6 +53,14 @@
 #include "archive.h"
 #include "filetree.h"
 
+#ifndef __APPLE__
+#include <sys/statfs.h>
+#endif
+
+#ifndef MNT_LOCAL
+#define MNT_LOCAL MS_BIND
+#endif
+
 int xar_is_safe_filename(const char *in_filename, char** out_filename)
 {
 	int result = -1;
@@ -571,7 +579,11 @@ size_t xar_optimal_io_size_at_path(const char *path)
 	if ( statfs(path, &target_mount_stat_fs) == 0 )
 	{
 		// iosize is the size that the filesystem likes to work in
+		#ifdef __APPLE__
 		size_t fs_iosize = target_mount_stat_fs.f_iosize;
+		#else
+		size_t fs_iosize = target_mount_stat_fs.f_bsize;
+		#endif
 		if ( fs_iosize == -1 )
 		{
 			fs_iosize = optimal_rsize;
